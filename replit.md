@@ -126,6 +126,13 @@ This is a comprehensive pet care platform built with React + Express.js, featuri
 ```
 Changelog:
 - July 01, 2025. Initial setup
+- July 01, 2025. 당근마켓 스타일 펫 플랫폼 완성
+  * 펫용품거래 마켓플레이스 구현 (첫 번째 메뉴)
+  * 펫응급센터 24시간 서비스 (두 번째 메뉴)
+  * 펫서비스 디렉토리 (미용, 훈련, 카페 등)
+  * 펫커뮤니티 기능 (실종, 발견, 입양, 모임)
+  * 응급 전화 연결 기능 (1588-0119)
+  * 예시 데이터 추가: 응급병원 6곳, 펫서비스 7곳, 커뮤니티 글 6개, 펫용품 12개
 ```
 
 ## User Preferences
