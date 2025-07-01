@@ -39,7 +39,8 @@ export default function CommunityPostCard({ post }: CommunityPostCardProps) {
 
   const formatTimeAgo = (date: Date) => {
     const now = new Date();
-    const diffInHours = Math.floor((now.getTime() - date.getTime()) / (1000 * 60 * 60));
+    const dateObj = new Date(date);
+    const diffInHours = Math.floor((now.getTime() - dateObj.getTime()) / (1000 * 60 * 60));
     
     if (diffInHours < 1) return "방금 전";
     if (diffInHours < 24) return `${diffInHours}시간 전`;
@@ -58,7 +59,7 @@ export default function CommunityPostCard({ post }: CommunityPostCardProps) {
         <div className="flex-1">
           <div className="flex items-center space-x-2 mb-2">
             <span className="font-medium text-pet-neutral-900">
-              {post.author.username}
+              {post.author?.username || "익명"}
             </span>
             <span className="text-pet-neutral-500 text-sm">
               {formatTimeAgo(post.createdAt!)}

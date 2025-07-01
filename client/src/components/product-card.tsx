@@ -14,7 +14,8 @@ export default function ProductCard({ listing, onLike }: ProductCardProps) {
 
   const formatTimeAgo = (date: Date) => {
     const now = new Date();
-    const diffInHours = Math.floor((now.getTime() - date.getTime()) / (1000 * 60 * 60));
+    const dateObj = new Date(date);
+    const diffInHours = Math.floor((now.getTime() - dateObj.getTime()) / (1000 * 60 * 60));
     
     if (diffInHours < 1) return "방금 전";
     if (diffInHours < 24) return `${diffInHours}시간 전`;
