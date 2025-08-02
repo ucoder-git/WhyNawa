@@ -94,6 +94,54 @@ export default function HomePage() {
         </div>
       </section>
 
+      {/* Emergency Services - Top Priority */}
+      <section className="mb-8 bg-gradient-to-r from-red-50 to-orange-50 rounded-xl p-6 border-2 border-red-200">
+        <div className="flex items-center justify-between mb-6">
+          <div className="flex items-center space-x-3">
+            <div className="bg-pet-emergency rounded-full p-3 animate-pulse">
+              <span className="text-2xl">🚑</span>
+            </div>
+            <div>
+              <h2 className="text-2xl font-bold text-pet-emergency">24시간 펫응급센터</h2>
+              <p className="text-sm text-pet-neutral-600">응급상황 시 즉시 연락하세요</p>
+            </div>
+          </div>
+          <div className="flex flex-col space-y-2">
+            <Link href="/emergency">
+              <Button className="bg-pet-emergency hover:bg-red-600 text-white font-bold">
+                병원 찾기
+              </Button>
+            </Link>
+            <Button 
+              variant="outline" 
+              className="border-yellow-400 bg-yellow-400 text-black font-bold hover:bg-yellow-500"
+              onClick={() => window.open('tel:1588-0119')}
+            >
+              📞 1588-0119
+            </Button>
+          </div>
+        </div>
+        
+        {hospitalsLoading ? (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            {[...Array(3)].map((_, i) => (
+              <div key={i} className="bg-gray-200 rounded-lg h-32 animate-pulse"></div>
+            ))}
+          </div>
+        ) : Array.isArray(emergencyHospitals) && emergencyHospitals.length > 0 ? (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            {emergencyHospitals.slice(0, 3).map((hospital: any) => (
+              <EmergencyCenterCard key={hospital.id} hospital={hospital} />
+            ))}
+          </div>
+        ) : (
+          <div className="text-center py-8 text-pet-neutral-500">
+            <p className="mb-4">등록된 응급센터가 없습니다.</p>
+            <p className="text-pet-emergency font-bold">응급시 1588-0119로 바로 연락하세요!</p>
+          </div>
+        )}
+      </section>
+
       {/* Quick Categories */}
       <section className="mb-8">
         <div className="flex items-center justify-between mb-4">
@@ -148,37 +196,6 @@ export default function HomePage() {
         ) : (
           <div className="text-center py-8 text-pet-neutral-500">
             등록된 펫용품이 없습니다.
-          </div>
-        )}
-      </section>
-
-      {/* Emergency Services */}
-      <section className="mb-8 bg-gradient-to-r from-red-50 to-orange-50 rounded-xl p-6">
-        <div className="flex items-center justify-between mb-4">
-          <div className="flex items-center space-x-2">
-            <span className="text-xl">🚑</span>
-            <h2 className="text-xl font-bold text-pet-neutral-900">24시간 펫응급센터</h2>
-          </div>
-          <Link href="/emergency" className="text-pet-emergency text-sm font-medium flex items-center">
-            전체보기 <ChevronRight className="w-4 h-4 ml-1" />
-          </Link>
-        </div>
-        
-        {hospitalsLoading ? (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-            {[...Array(3)].map((_, i) => (
-              <div key={i} className="bg-gray-200 rounded-lg h-32 animate-pulse"></div>
-            ))}
-          </div>
-        ) : Array.isArray(emergencyHospitals) && emergencyHospitals.length > 0 ? (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-            {emergencyHospitals.slice(0, 3).map((hospital: any) => (
-              <EmergencyCenterCard key={hospital.id} hospital={hospital} />
-            ))}
-          </div>
-        ) : (
-          <div className="text-center py-8 text-pet-neutral-500">
-            등록된 응급센터가 없습니다.
           </div>
         )}
       </section>
