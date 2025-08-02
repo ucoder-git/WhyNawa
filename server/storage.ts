@@ -6,6 +6,8 @@ import {
   petServices,
   communityPosts,
   emergencyBookings,
+  serviceInquiries,
+  adminUsers,
   type User,
   type InsertUser,
   type Listing,
@@ -19,6 +21,10 @@ import {
   type InsertCommunityPost,
   type EmergencyBooking,
   type InsertEmergencyBooking,
+  type ServiceInquiry,
+  type InsertServiceInquiry,
+  type AdminUser,
+  type InsertAdminUser,
 } from "@shared/schema";
 import { db } from "./db";
 import { eq, desc, asc, like, and, sql } from "drizzle-orm";
@@ -62,6 +68,21 @@ export interface IStorage {
   getEmergencyBookingById(id: number): Promise<(EmergencyBooking & { hospital?: EmergencyHospital }) | undefined>;
   createEmergencyBooking(booking: InsertEmergencyBooking): Promise<EmergencyBooking>;
   updateEmergencyBooking(id: number, updates: Partial<InsertEmergencyBooking>): Promise<EmergencyBooking | undefined>;
+
+  // Service inquiry operations
+  getServiceInquiries(status?: string): Promise<ServiceInquiry[]>;
+  getServiceInquiryById(id: number): Promise<ServiceInquiry | undefined>;
+  createServiceInquiry(inquiry: InsertServiceInquiry): Promise<ServiceInquiry>;
+  updateServiceInquiry(id: number, updates: Partial<ServiceInquiry>): Promise<ServiceInquiry | undefined>;
+
+  // Admin operations
+  getAdminUsers(): Promise<AdminUser[]>;
+  getAdminUserById(id: number): Promise<AdminUser | undefined>;
+  createAdminUser(admin: InsertAdminUser): Promise<AdminUser>;
+  updateEmergencyHospital(id: number, updates: Partial<InsertEmergencyHospital>): Promise<EmergencyHospital | undefined>;
+  updatePetService(id: number, updates: Partial<InsertPetService>): Promise<PetService | undefined>;
+  deleteEmergencyHospital(id: number): Promise<void>;
+  deletePetService(id: number): Promise<void>;
 }
 
 export class DatabaseStorage implements IStorage {
@@ -326,6 +347,77 @@ export class DatabaseStorage implements IStorage {
       .where(eq(emergencyBookings.id, id))
       .returning();
     return updated || undefined;
+  }
+
+  // Service inquiry operations
+  async getServiceInquiries(status?: string): Promise<ServiceInquiry[]> {
+    let query = db.select().from(serviceInquiries);
+    
+    if (status) {
+      query = query.where(eq(serviceInquiries.status, status));
+    }
+    
+    return await query.orderBy(desc(serviceInquiries.createdAt));
+  }
+
+  async getServiceInquiryById(id: number): Promise<ServiceInquiry | undefined> {
+    const [inquiry] = await db.select().from(serviceInquiries).where(eq(serviceInquiries.id, id));
+    return inquiry || undefined;
+  }
+
+  async createServiceInquiry(inquiry: InsertServiceInquiry): Promise<ServiceInquiry> {
+    const [newInquiry] = await db.insert(serviceInquiries).values(inquiry).returning();
+    return newInquiry;
+  }
+
+  async updateServiceInquiry(id: number, updates: Partial<ServiceInquiry>): Promise<ServiceInquiry | undefined> {
+    const [updated] = await db
+      .update(serviceInquiries)
+      .set({ ...updates, updatedAt: new Date() })
+      .where(eq(serviceInquiries.id, id))
+      .returning();
+    return updated || undefined;
+  }
+
+  // Admin operations
+  async getAdminUsers(): Promise<AdminUser[]> {
+    return await db.select().from(adminUsers).where(eq(adminUsers.isActive, true));
+  }
+
+  async getAdminUserById(id: number): Promise<AdminUser | undefined> {
+    const [admin] = await db.select().from(adminUsers).where(eq(adminUsers.id, id));
+    return admin || undefined;
+  }
+
+  async createAdminUser(admin: InsertAdminUser): Promise<AdminUser> {
+    const [newAdmin] = await db.insert(adminUsers).values(admin).returning();
+    return newAdmin;
+  }
+
+  async updateEmergencyHospital(id: number, updates: Partial<InsertEmergencyHospital>): Promise<EmergencyHospital | undefined> {
+    const [updated] = await db
+      .update(emergencyHospitals)
+      .set(updates)
+      .where(eq(emergencyHospitals.id, id))
+      .returning();
+    return updated || undefined;
+  }
+
+  async updatePetService(id: number, updates: Partial<InsertPetService>): Promise<PetService | undefined> {
+    const [updated] = await db
+      .update(petServices)
+      .set(updates)
+      .where(eq(petServices.id, id))
+      .returning();
+    return updated || undefined;
+  }
+
+  async deleteEmergencyHospital(id: number): Promise<void> {
+    await db.delete(emergencyHospitals).where(eq(emergencyHospitals.id, id));
+  }
+
+  async deletePetService(id: number): Promise<void> {
+    await db.delete(petServices).where(eq(petServices.id, id));
   }
 }
 

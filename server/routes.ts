@@ -1,7 +1,7 @@
 import type { Express } from "express";
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
-import { insertListingSchema, insertEmergencyBookingSchema, insertCommunityPostSchema } from "@shared/schema";
+import { insertListingSchema, insertEmergencyBookingSchema, insertCommunityPostSchema, insertServiceInquirySchema, insertEmergencyHospitalSchema, insertPetServiceSchema } from "@shared/schema";
 import { z } from "zod";
 
 export async function registerRoutes(app: Express): Promise<Server> {
@@ -197,6 +197,134 @@ export async function registerRoutes(app: Express): Promise<Server> {
     } catch (error) {
       console.error("Error handling emergency call:", error);
       res.status(500).json({ message: "Failed to initiate emergency call" });
+    }
+  });
+
+  // Service inquiries routes
+  app.get("/api/service-inquiries", async (req, res) => {
+    try {
+      const { status } = req.query;
+      const inquiries = await storage.getServiceInquiries(status as string);
+      res.json(inquiries);
+    } catch (error) {
+      console.error("Error fetching service inquiries:", error);
+      res.status(500).json({ message: "Failed to fetch service inquiries" });
+    }
+  });
+
+  app.post("/api/service-inquiries", async (req, res) => {
+    try {
+      const validatedData = insertServiceInquirySchema.parse(req.body);
+      const inquiry = await storage.createServiceInquiry(validatedData);
+      res.status(201).json(inquiry);
+    } catch (error) {
+      if (error instanceof z.ZodError) {
+        return res.status(400).json({ message: "Invalid inquiry data", errors: error.errors });
+      }
+      console.error("Error creating service inquiry:", error);
+      res.status(500).json({ message: "Failed to create service inquiry" });
+    }
+  });
+
+  app.put("/api/service-inquiries/:id", async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      const updates = req.body;
+      const inquiry = await storage.updateServiceInquiry(id, updates);
+      
+      if (!inquiry) {
+        return res.status(404).json({ message: "Service inquiry not found" });
+      }
+      
+      res.json(inquiry);
+    } catch (error) {
+      console.error("Error updating service inquiry:", error);
+      res.status(500).json({ message: "Failed to update service inquiry" });
+    }
+  });
+
+  // Admin routes for managing services
+  app.post("/api/admin/emergency-hospitals", async (req, res) => {
+    try {
+      const validatedData = insertEmergencyHospitalSchema.parse(req.body);
+      const hospital = await storage.createEmergencyHospital(validatedData);
+      res.status(201).json(hospital);
+    } catch (error) {
+      if (error instanceof z.ZodError) {
+        return res.status(400).json({ message: "Invalid hospital data", errors: error.errors });
+      }
+      console.error("Error creating emergency hospital:", error);
+      res.status(500).json({ message: "Failed to create emergency hospital" });
+    }
+  });
+
+  app.put("/api/admin/emergency-hospitals/:id", async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      const updates = req.body;
+      const hospital = await storage.updateEmergencyHospital(id, updates);
+      
+      if (!hospital) {
+        return res.status(404).json({ message: "Emergency hospital not found" });
+      }
+      
+      res.json(hospital);
+    } catch (error) {
+      console.error("Error updating emergency hospital:", error);
+      res.status(500).json({ message: "Failed to update emergency hospital" });
+    }
+  });
+
+  app.delete("/api/admin/emergency-hospitals/:id", async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      await storage.deleteEmergencyHospital(id);
+      res.json({ message: "Emergency hospital deleted successfully" });
+    } catch (error) {
+      console.error("Error deleting emergency hospital:", error);
+      res.status(500).json({ message: "Failed to delete emergency hospital" });
+    }
+  });
+
+  app.post("/api/admin/pet-services", async (req, res) => {
+    try {
+      const validatedData = insertPetServiceSchema.parse(req.body);
+      const service = await storage.createPetService(validatedData);
+      res.status(201).json(service);
+    } catch (error) {
+      if (error instanceof z.ZodError) {
+        return res.status(400).json({ message: "Invalid service data", errors: error.errors });
+      }
+      console.error("Error creating pet service:", error);
+      res.status(500).json({ message: "Failed to create pet service" });
+    }
+  });
+
+  app.put("/api/admin/pet-services/:id", async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      const updates = req.body;
+      const service = await storage.updatePetService(id, updates);
+      
+      if (!service) {
+        return res.status(404).json({ message: "Pet service not found" });
+      }
+      
+      res.json(service);
+    } catch (error) {
+      console.error("Error updating pet service:", error);
+      res.status(500).json({ message: "Failed to update pet service" });
+    }
+  });
+
+  app.delete("/api/admin/pet-services/:id", async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      await storage.deletePetService(id);
+      res.json({ message: "Pet service deleted successfully" });
+    } catch (error) {
+      console.error("Error deleting pet service:", error);
+      res.status(500).json({ message: "Failed to delete pet service" });
     }
   });
 

@@ -114,6 +114,34 @@ export const emergencyBookings = pgTable("emergency_bookings", {
   updatedAt: timestamp("updated_at").defaultNow(),
 });
 
+// Service registration inquiries
+export const serviceInquiries = pgTable("service_inquiries", {
+  id: serial("id").primaryKey(),
+  businessName: text("business_name").notNull(),
+  businessType: text("business_type").notNull(), // "hospital", "cafe", "grooming", "hotel", "training", "boarding"
+  ownerName: text("owner_name").notNull(),
+  phoneNumber: text("phone_number").notNull(),
+  email: text("email"),
+  address: text("address").notNull(),
+  description: text("description"),
+  services: text("services").array(),
+  businessLicense: text("business_license"),
+  status: text("status").default("pending"), // "pending", "approved", "rejected", "under_review"
+  adminNotes: text("admin_notes"),
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
+
+// Admin users
+export const adminUsers = pgTable("admin_users", {
+  id: serial("id").primaryKey(),
+  username: text("username").notNull().unique(),
+  email: text("email").notNull().unique(),
+  role: text("role").default("admin"), // "admin", "super_admin"
+  isActive: boolean("is_active").default(true),
+  createdAt: timestamp("created_at").defaultNow(),
+});
+
 // Relations
 export const usersRelations = relations(users, ({ many }) => ({
   listings: many(listings),
@@ -192,6 +220,19 @@ export const insertEmergencyBookingSchema = createInsertSchema(emergencyBookings
   updatedAt: true,
 });
 
+export const insertServiceInquirySchema = createInsertSchema(serviceInquiries).omit({
+  id: true,
+  createdAt: true,
+  updatedAt: true,
+  status: true,
+  adminNotes: true,
+});
+
+export const insertAdminUserSchema = createInsertSchema(adminUsers).omit({
+  id: true,
+  createdAt: true,
+});
+
 // Types
 export type User = typeof users.$inferSelect;
 export type InsertUser = z.infer<typeof insertUserSchema>;
@@ -212,3 +253,9 @@ export type InsertCommunityPost = z.infer<typeof insertCommunityPostSchema>;
 
 export type EmergencyBooking = typeof emergencyBookings.$inferSelect;
 export type InsertEmergencyBooking = z.infer<typeof insertEmergencyBookingSchema>;
+
+export type ServiceInquiry = typeof serviceInquiries.$inferSelect;
+export type InsertServiceInquiry = z.infer<typeof insertServiceInquirySchema>;
+
+export type AdminUser = typeof adminUsers.$inferSelect;
+export type InsertAdminUser = z.infer<typeof insertAdminUserSchema>;

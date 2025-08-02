@@ -10,6 +10,8 @@ import Emergency from "@/pages/emergency";
 import Services from "@/pages/services";
 import Community from "@/pages/community";
 import PostItem from "@/pages/post-item";
+import ServiceInquiry from "@/pages/service-inquiry";
+import Admin from "@/pages/admin";
 import Header from "@/components/header";
 import Navigation from "@/components/navigation";
 import BottomNavigation from "@/components/bottom-navigation";
@@ -27,6 +29,8 @@ function Router() {
         <Route path="/services" component={Services} />
         <Route path="/community" component={Community} />
         <Route path="/post-item" component={PostItem} />
+        <Route path="/service-inquiry" component={ServiceInquiry} />
+        <Route path="/admin" component={Admin} />
         <Route component={NotFound} />
       </Switch>
       <EmergencyQuickAccess />

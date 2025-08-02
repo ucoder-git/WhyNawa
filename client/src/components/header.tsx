@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Search, Bell, Heart, User, MapPin, ChevronDown, ShoppingBasket, Phone } from "lucide-react";
+import { Search, Bell, Heart, User, MapPin, ChevronDown, ShoppingBasket, Phone, MessageCircle } from "lucide-react";
 import { Link } from "wouter";
 
 export default function Header() {
@@ -35,6 +35,12 @@ export default function Header() {
               <button className="flex items-center space-x-2 px-4 py-2 bg-pet-emergency text-white rounded-lg hover:bg-red-600 transition-colors animate-pulse">
                 <Heart className="w-4 h-4" />
                 <span className="font-medium">🚨응급센터</span>
+              </button>
+            </Link>
+            <Link href="/service-inquiry">
+              <button className="flex items-center space-x-2 px-4 py-2 bg-pet-secondary text-white rounded-lg hover:bg-pet-secondary/90 transition-colors">
+                <MessageCircle className="w-4 h-4" />
+                <span className="font-medium">서비스 문의</span>
               </button>
             </Link>
           </div>
