@@ -65,6 +65,7 @@ jspm_packages/
 # Database
 *.sqlite
 *.db
+dev.db
 
 # Replit specific
 .replit
