@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Search, Bell, Heart, User, MapPin, ChevronDown } from "lucide-react";
+import { Search, Bell, Heart, User, MapPin, ChevronDown, ShoppingBasket, Phone } from "lucide-react";
 import { Link } from "wouter";
 
 export default function Header() {
@@ -23,6 +23,22 @@ export default function Header() {
             </div>
           </div>
 
+          {/* Main Navigation Menu */}
+          <div className="hidden lg:flex items-center space-x-2">
+            <Link href="/marketplace">
+              <button className="flex items-center space-x-2 px-4 py-2 bg-pet-primary text-white rounded-lg hover:bg-pet-primary/90 transition-colors">
+                <ShoppingBasket className="w-4 h-4" />
+                <span className="font-medium">펫용품거래</span>
+              </button>
+            </Link>
+            <Link href="/emergency">
+              <button className="flex items-center space-x-2 px-4 py-2 bg-pet-emergency text-white rounded-lg hover:bg-red-600 transition-colors animate-pulse">
+                <Heart className="w-4 h-4" />
+                <span className="font-medium">🚨응급센터</span>
+              </button>
+            </Link>
+          </div>
+
           {/* Search Bar */}
           <div className="flex-1 max-w-md mx-4">
             <div className="relative">
@@ -38,7 +54,15 @@ export default function Header() {
           </div>
 
           {/* User Actions */}
-          <div className="flex items-center space-x-4">
+          <div className="flex items-center space-x-2">
+            {/* Mobile Emergency Button */}
+            <Link href="/emergency" className="lg:hidden">
+              <button className="flex items-center space-x-1 px-3 py-2 bg-pet-emergency text-white rounded-lg hover:bg-red-600 transition-colors animate-pulse">
+                <Heart className="w-4 h-4" />
+                <span className="text-sm font-medium">응급</span>
+              </button>
+            </Link>
+
             <button className="p-2 text-pet-neutral-500 hover:text-pet-primary transition-colors">
               <Bell className="w-5 h-5" />
             </button>
