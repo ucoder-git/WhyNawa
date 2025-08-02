@@ -37,7 +37,7 @@ export default function HomePage() {
 
   return (
     <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 pb-20">
-      {/* Hero Section */}
+      {/* Hero Section with Emergency Priority */}
       <section className="mb-8">
         <div className="relative rounded-2xl overflow-hidden bg-gradient-to-r from-orange-400 to-pet-secondary h-48 sm:h-64">
           <div className="absolute inset-0 bg-black bg-opacity-30"></div>
@@ -47,16 +47,48 @@ export default function HomePage() {
               <span className="text-yellow-300">모든 것</span>이 여기에
             </h1>
             <div className="flex flex-wrap gap-3">
+              <Link href="/emergency">
+                <Button className="bg-pet-emergency text-white hover:bg-red-600 text-lg px-6 py-3 animate-pulse">
+                  🚨 24시간 응급센터
+                </Button>
+              </Link>
               <Link href="/marketplace">
                 <Button className="bg-white text-pet-primary hover:bg-gray-100">
                   펫용품 둘러보기
                 </Button>
               </Link>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Emergency Quick Access Banner */}
+      <section className="mb-8">
+        <div className="bg-red-50 border-l-4 border-pet-emergency rounded-lg p-4">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center space-x-3">
+              <div className="bg-pet-emergency rounded-full p-2">
+                <Heart className="w-5 h-5 text-white" />
+              </div>
+              <div>
+                <h3 className="font-bold text-pet-emergency">응급상황 발생시</h3>
+                <p className="text-sm text-pet-neutral-600">24시간 펫 응급센터와 연결됩니다</p>
+              </div>
+            </div>
+            <div className="flex space-x-2">
               <Link href="/emergency">
-                <Button className="bg-pet-emergency text-white hover:bg-red-600">
-                  응급센터 찾기
+                <Button size="sm" className="bg-pet-emergency hover:bg-red-600 text-white">
+                  응급병원 찾기
                 </Button>
               </Link>
+              <Button 
+                size="sm" 
+                variant="outline" 
+                className="border-pet-emergency text-pet-emergency hover:bg-red-50"
+                onClick={() => window.open('tel:1588-0119')}
+              >
+                📞 1588-0119
+              </Button>
             </div>
           </div>
         </div>
@@ -107,7 +139,7 @@ export default function HomePage() {
               <div key={i} className="bg-gray-200 rounded-lg h-64 animate-pulse"></div>
             ))}
           </div>
-        ) : listings && listings.length > 0 ? (
+        ) : Array.isArray(listings) && listings.length > 0 ? (
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
             {listings.slice(0, 4).map((listing: any) => (
               <ProductCard key={listing.id} listing={listing} />
@@ -138,7 +170,7 @@ export default function HomePage() {
               <div key={i} className="bg-gray-200 rounded-lg h-32 animate-pulse"></div>
             ))}
           </div>
-        ) : emergencyHospitals && emergencyHospitals.length > 0 ? (
+        ) : Array.isArray(emergencyHospitals) && emergencyHospitals.length > 0 ? (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
             {emergencyHospitals.slice(0, 3).map((hospital: any) => (
               <EmergencyCenterCard key={hospital.id} hospital={hospital} />
@@ -166,7 +198,7 @@ export default function HomePage() {
               <div key={i} className="bg-gray-200 rounded-lg h-48 animate-pulse"></div>
             ))}
           </div>
-        ) : petServices && petServices.length > 0 ? (
+        ) : Array.isArray(petServices) && petServices.length > 0 ? (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
             {petServices.slice(0, 4).map((service: any) => (
               <ServiceCard key={service.id} service={service} />
@@ -194,7 +226,7 @@ export default function HomePage() {
               <div key={i} className="bg-gray-200 rounded-lg h-32 animate-pulse"></div>
             ))}
           </div>
-        ) : communityPosts && communityPosts.length > 0 ? (
+        ) : Array.isArray(communityPosts) && communityPosts.length > 0 ? (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
             {communityPosts.slice(0, 3).map((post: any) => (
               <CommunityPostCard key={post.id} post={post} />

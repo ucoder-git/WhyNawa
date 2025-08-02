@@ -1,5 +1,5 @@
 import { Link, useLocation } from "wouter";
-import { ShoppingBasket, Plus, Scissors, Users, Home } from "lucide-react";
+import { ShoppingBasket, Heart, Scissors, Users, Home } from "lucide-react";
 
 export default function Navigation() {
   const [location] = useLocation();
@@ -14,9 +14,9 @@ export default function Navigation() {
     },
     {
       href: "/emergency",
-      icon: Plus,
-      label: "펫응급센터",
-      className: "bg-pet-emergency text-white",
+      icon: Heart,
+      label: "🚨응급센터",
+      className: "bg-pet-emergency text-white animate-pulse",
       active: location === "/emergency"
     },
     {

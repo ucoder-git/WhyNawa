@@ -33,13 +33,26 @@ export default function EmergencyQuickAccess() {
 
   return (
     <div className="fixed bottom-20 right-4 z-40">
-      <button
-        onClick={handleEmergencyCall}
-        className="bg-pet-emergency text-white p-4 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 animate-pulse"
-        aria-label="응급전화 1588-0119"
-      >
-        <Phone className="w-6 h-6" />
-      </button>
+      <div className="relative">
+        {/* Pulse animation background */}
+        <div className="absolute inset-0 bg-pet-emergency rounded-full animate-ping opacity-75"></div>
+        
+        <button
+          onClick={handleEmergencyCall}
+          className="relative bg-pet-emergency text-white p-4 rounded-full shadow-2xl hover:shadow-3xl transition-all duration-300 border-2 border-white"
+          aria-label="응급전화 1588-0119"
+        >
+          <div className="flex flex-col items-center">
+            <Phone className="w-7 h-7 mb-1" />
+            <span className="text-xs font-bold">응급</span>
+          </div>
+        </button>
+        
+        {/* Emergency label */}
+        <div className="absolute -top-2 -left-2 bg-yellow-400 text-black text-xs font-bold px-2 py-1 rounded-full">
+          🚨 24H
+        </div>
+      </div>
     </div>
   );
 }
