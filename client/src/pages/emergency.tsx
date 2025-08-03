@@ -14,6 +14,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { apiRequest } from "@/lib/queryClient";
 import { useToast } from "@/hooks/use-toast";
+import type { EmergencyHospital } from "@shared/schema";
 
 const emergencyBookingSchema = z.object({
   petOwnerName: z.string().min(1, "반려인 이름을 입력해주세요"),
@@ -34,8 +35,11 @@ export default function EmergencyPage() {
   const { toast } = useToast();
   const queryClient = useQueryClient();
 
-  const { data: hospitals, isLoading } = useQuery({
-    queryKey: [`/api/emergency-hospitals?location=${encodeURIComponent(location)}`],
+  const { data: hospitals = [], isLoading } = useQuery<EmergencyHospital[]>({
+    queryKey: [
+      "/api/emergency-hospitals",
+      location ? `location=${encodeURIComponent(location)}` : undefined,
+    ].filter(Boolean) as string[],
   });
 
   const form = useForm<EmergencyBookingForm>({
@@ -312,14 +316,14 @@ export default function EmergencyPage() {
             <div key={i} className="bg-gray-200 rounded-lg h-32 animate-pulse"></div>
           ))}
         </div>
-      ) : hospitals && hospitals.length > 0 ? (
+      ) : hospitals && Array.isArray(hospitals) && hospitals.length > 0 ? (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-          {hospitals.map((hospital: any) => (
+          {hospitals.map((hospital: EmergencyHospital) => (
             <EmergencyCenterCard
               key={hospital.id}
               hospital={hospital}
               onCall={(hospitalId) => {
-                const selectedHospital = hospitals.find((h: any) => h.id === hospitalId);
+                const selectedHospital = hospitals.find((h: EmergencyHospital) => h.id === hospitalId);
                 if (selectedHospital) {
                   toast({
                     title: "병원 연결",

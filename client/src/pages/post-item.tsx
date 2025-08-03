@@ -13,18 +13,27 @@ import { z } from "zod";
 import { apiRequest } from "@/lib/queryClient";
 import { useToast } from "@/hooks/use-toast";
 import { Camera, X, Upload, MapPin, Trophy } from "lucide-react";
+import type { Category } from "@shared/schema";
 
 const createListingSchema = z.object({
   title: z.string().min(1, "상품명을 입력해주세요").max(100, "상품명은 100자 이내로 입력해주세요"),
   description: z.string().min(10, "상품 설명을 10자 이상 입력해주세요").max(1000, "상품 설명은 1000자 이내로 입력해주세요"),
   price: z.string().min(1, "가격을 입력해주세요").refine((val) => !isNaN(parseFloat(val)) && parseFloat(val) > 0, "올바른 가격을 입력해주세요"),
-  categoryId: z.string().min(1, "카테고리를 선택해주세요").transform((val) => parseInt(val)),
+  categoryId: z.string().min(1, "카테고리를 선택해주세요"),
   condition: z.string().min(1, "상품 상태를 선택해주세요"),
   location: z.string().min(1, "거래 지역을 입력해주세요"),
   sellerId: z.number().default(1), // In real app, this would come from auth
 });
 
-type CreateListingForm = z.infer<typeof createListingSchema>;
+type CreateListingForm = {
+  title: string;
+  description: string;
+  price: string;
+  categoryId: string;
+  condition: string;
+  location: string;
+  sellerId: number;
+};
 
 export default function PostItemPage() {
   const [, setLocation] = useLocation();
@@ -33,12 +42,11 @@ export default function PostItemPage() {
   const { toast } = useToast();
   const queryClient = useQueryClient();
 
-  const { data: categories, isLoading: categoriesLoading } = useQuery({
+  const { data: categories = [], isLoading: categoriesLoading } = useQuery<Category[]>({
     queryKey: ["/api/categories"],
   });
 
   const form = useForm<CreateListingForm>({
-    resolver: zodResolver(createListingSchema),
     defaultValues: {
       title: "",
       description: "",
@@ -216,7 +224,7 @@ export default function PostItemPage() {
                       <SelectContent>
                         {categoriesLoading ? (
                           <SelectItem value="">로딩중...</SelectItem>
-                        ) : categories?.map((category: any) => (
+                        ) : categories.map((category: Category) => (
                           <SelectItem key={category.id} value={category.id.toString()}>
                             {category.name}
                           </SelectItem>

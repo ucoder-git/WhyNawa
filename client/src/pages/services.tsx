@@ -4,17 +4,18 @@ import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import ServiceCard from "@/components/service-card";
 import { Search, MapPin } from "lucide-react";
+import type { PetService } from "@shared/schema";
 
 export default function ServicesPage() {
   const [location, setLocation] = useState("서초4동");
   const [serviceType, setServiceType] = useState("");
 
-  const { data: services, isLoading } = useQuery({
+  const { data: services = [], isLoading } = useQuery<PetService[]>({
     queryKey: [
-      `/api/pet-services`,
-      location && `location=${encodeURIComponent(location)}`,
-      serviceType && `type=${serviceType}`,
-    ].filter(Boolean).join("&"),
+      "/api/pet-services",
+      location ? `location=${encodeURIComponent(location)}` : undefined,
+      serviceType ? `type=${serviceType}` : undefined,
+    ].filter(Boolean) as string[],
   });
 
   const serviceTypes = [
@@ -94,7 +95,7 @@ export default function ServicesPage() {
             총 {services.length}개의 서비스
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-            {services.map((service: any) => (
+            {services.map((service: PetService) => (
               <ServiceCard key={service.id} service={service} />
             ))}
           </div>

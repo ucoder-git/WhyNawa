@@ -6,22 +6,23 @@ import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import ProductCard from "@/components/product-card";
 import { Search, Filter, Plus } from "lucide-react";
+import type { Listing, Category } from "@shared/schema";
 
 export default function MarketplacePage() {
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("");
   const [sortBy, setSortBy] = useState("latest");
 
-  const { data: listings, isLoading } = useQuery({
+  const { data: listings = [], isLoading } = useQuery<Listing[]>({
     queryKey: [
-      `/api/listings`,
-      searchTerm && `search=${encodeURIComponent(searchTerm)}`,
-      selectedCategory && `categoryId=${selectedCategory}`,
+      "/api/listings",
+      searchTerm ? `search=${encodeURIComponent(searchTerm)}` : undefined,
+      selectedCategory ? `categoryId=${selectedCategory}` : undefined,
       `sortBy=${sortBy}`
-    ].filter(Boolean).join("&"),
+    ].filter(Boolean) as string[],
   });
 
-  const { data: categories } = useQuery({
+  const { data: categories = [] } = useQuery<Category[]>({
     queryKey: ["/api/categories"],
   });
 
@@ -57,7 +58,7 @@ export default function MarketplacePage() {
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="">전체 카테고리</SelectItem>
-              {categories?.map((category: any) => (
+              {categories.map((category: Category) => (
                 <SelectItem key={category.id} value={category.id.toString()}>
                   {category.name}
                 </SelectItem>
@@ -97,7 +98,7 @@ export default function MarketplacePage() {
             총 {listings.length}개의 상품
           </div>
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
-            {listings.map((listing: any) => (
+            {listings.map((listing: Listing) => (
               <ProductCard key={listing.id} listing={listing} />
             ))}
           </div>

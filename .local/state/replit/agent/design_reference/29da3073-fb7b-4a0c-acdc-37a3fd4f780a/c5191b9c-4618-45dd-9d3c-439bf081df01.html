@@ -1,0 +1,629 @@
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>펫앤24 - 우리 동네 반려동물 마켓플레이스</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'pet-orange': '#FF7A00',
+                        'pet-green': '#4CAF50',
+                        'pet-blue': '#2196F3',
+                        'pet-cream': '#FFF3E0',
+                        'pet-light-green': '#E8F5E8'
+                    },
+                    fontFamily: {
+                        'inter': ['Inter', 'sans-serif'],
+                        'noto': ['Noto Sans KR', 'sans-serif']
+                    }
+                }
+            }
+        };
+    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-50 font-noto">
+
+    <!-- @COMPONENT: Header [navigation, location selector, search] -->
+    <header class="bg-white shadow-sm sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <!-- Logo -->
+                <div class="flex items-center">
+                    <div class="flex-shrink-0">
+                        <div class="text-2xl font-bold text-pet-orange">펫앤24</div>
+                    </div>
+                </div>
+
+                <!-- Location Selector -->
+                <div class="hidden md:flex items-center space-x-2 bg-pet-cream px-4 py-2 rounded-lg cursor-pointer hover:bg-orange-100 transition-colors">
+                    <i class="fas fa-map-marker-alt text-pet-orange"></i>
+                    <span class="text-sm font-medium" data-bind="user.location">서초4동</span>
+                    <i class="fas fa-chevron-down text-gray-400 text-xs"></i>
+                </div>
+
+                <!-- Search Bar -->
+                <div class="flex-1 max-w-lg mx-8">
+                    <div class="relative">
+                        <input 
+                            type="text" 
+                            placeholder="펫용품, 펫서비스 검색" 
+                            class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pet-orange focus:border-transparent"
+                            data-mock="true"
+                        />
+                        <i class="fas fa-search absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
+                    </div>
+                </div>
+
+                <!-- User Actions -->
+                <div class="flex items-center space-x-4">
+                    <button class="text-gray-600 hover:text-pet-orange transition-colors">
+                        <i class="fas fa-heart text-xl"></i>
+                    </button>
+                    <button class="text-gray-600 hover:text-pet-orange transition-colors">
+                        <i class="fas fa-bell text-xl"></i>
+                    </button>
+                    <button class="bg-pet-orange text-white px-4 py-2 rounded-lg hover:bg-orange-600 transition-colors">
+                        <i class="fas fa-plus mr-2"></i>글쓰기
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Navigation Menu -->
+        <div class="border-t border-gray-200">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <nav class="flex space-x-8 overflow-x-auto">
+                    <a href="#" class="flex items-center space-x-2 py-4 text-pet-orange border-b-2 border-pet-orange whitespace-nowrap">
+                        <i class="fas fa-home"></i>
+                        <span class="font-medium">홈</span>
+                    </a>
+                    <a href="#" class="flex items-center space-x-2 py-4 text-gray-600 hover:text-pet-orange transition-colors whitespace-nowrap">
+                        <i class="fas fa-shopping-bag"></i>
+                        <span>펫용품거래</span>
+                    </a>
+                    <a href="#" class="flex items-center space-x-2 py-4 text-gray-600 hover:text-pet-orange transition-colors whitespace-nowrap">
+                        <i class="fas fa-cut"></i>
+                        <span>펫서비스</span>
+                    </a>
+                    <a href="#" class="flex items-center space-x-2 py-4 text-gray-600 hover:text-pet-orange transition-colors whitespace-nowrap">
+                        <i class="fas fa-stethoscope"></i>
+                        <span>동물병원</span>
+                    </a>
+                    <a href="#" class="flex items-center space-x-2 py-4 text-gray-600 hover:text-pet-orange transition-colors whitespace-nowrap">
+                        <i class="fas fa-users"></i>
+                        <span>펫커뮤니티</span>
+                    </a>
+                    <a href="#" class="flex items-center space-x-2 py-4 text-gray-600 hover:text-pet-orange transition-colors whitespace-nowrap">
+                        <i class="fas fa-heart"></i>
+                        <span>입양분양</span>
+                    </a>
+                    <a href="#" class="flex items-center space-x-2 py-4 text-gray-600 hover:text-pet-orange transition-colors whitespace-nowrap">
+                        <i class="fas fa-calendar-alt"></i>
+                        <span>펫모임</span>
+                    </a>
+                </nav>
+            </div>
+        </div>
+    </header>
+    <!-- @END_COMPONENT: Header -->
+
+    <!-- Mobile Location Bar -->
+    <div class="md:hidden bg-pet-cream px-4 py-3 flex items-center justify-between">
+        <div class="flex items-center space-x-2">
+            <i class="fas fa-map-marker-alt text-pet-orange"></i>
+            <span class="text-sm font-medium" data-bind="user.location">서초4동</span>
+            <i class="fas fa-chevron-down text-gray-400 text-xs"></i>
+        </div>
+        <button class="text-sm text-pet-orange font-medium">위치 변경</button>
+    </div>
+
+    <!-- @COMPONENT: Hero Section [location-based welcome] -->
+    <section class="bg-gradient-to-r from-pet-orange to-orange-400 text-white py-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center">
+                <h1 class="text-3xl md:text-4xl font-bold mb-4">
+                    <span data-bind="user.location">서초4동</span> 근처의 펫앤24
+                </h1>
+                <p class="text-xl opacity-90 mb-8">우리 동네 반려동물과 함께하는 따뜻한 마켓플레이스</p>
+                
+                <!-- Popular Search Terms -->
+                <div class="max-w-4xl mx-auto">
+                    <p class="text-sm opacity-80 mb-4">인기 검색어</p>
+                    <div class="flex flex-wrap justify-center gap-2">
+                        <span class="bg-white bg-opacity-20 px-3 py-1 rounded-full text-sm">강아지 사료</span>
+                        <span class="bg-white bg-opacity-20 px-3 py-1 rounded-full text-sm">고양이 모래</span>
+                        <span class="bg-white bg-opacity-20 px-3 py-1 rounded-full text-sm">펫미용</span>
+                        <span class="bg-white bg-opacity-20 px-3 py-1 rounded-full text-sm">동물병원</span>
+                        <span class="bg-white bg-opacity-20 px-3 py-1 rounded-full text-sm">펫시터</span>
+                        <span class="bg-white bg-opacity-20 px-3 py-1 rounded-full text-sm">강아지 산책</span>
+                        <span class="bg-white bg-opacity-20 px-3 py-1 rounded-full text-sm">입양</span>
+                        <span class="bg-white bg-opacity-20 px-3 py-1 rounded-full text-sm">펫용품</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- @END_COMPONENT: Hero Section -->
+
+    <!-- @COMPONENT: Quick Categories [main service categories] -->
+    <section class="py-8 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-7 gap-4">
+                <div class="text-center p-4 rounded-xl hover:bg-pet-cream transition-colors cursor-pointer">
+                    <div class="w-12 h-12 bg-pet-light-green rounded-full flex items-center justify-center mx-auto mb-3">
+                        <i class="fas fa-shopping-bag text-pet-green text-xl"></i>
+                    </div>
+                    <p class="text-sm font-medium">펫용품거래</p>
+                </div>
+                <div class="text-center p-4 rounded-xl hover:bg-pet-cream transition-colors cursor-pointer">
+                    <div class="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-3">
+                        <i class="fas fa-cut text-pet-blue text-xl"></i>
+                    </div>
+                    <p class="text-sm font-medium">펫서비스</p>
+                </div>
+                <div class="text-center p-4 rounded-xl hover:bg-pet-cream transition-colors cursor-pointer">
+                    <div class="w-12 h-12 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-3">
+                        <i class="fas fa-stethoscope text-red-500 text-xl"></i>
+                    </div>
+                    <p class="text-sm font-medium">동물병원</p>
+                </div>
+                <div class="text-center p-4 rounded-xl hover:bg-pet-cream transition-colors cursor-pointer">
+                    <div class="w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-3">
+                        <i class="fas fa-users text-purple-500 text-xl"></i>
+                    </div>
+                    <p class="text-sm font-medium">펫커뮤니티</p>
+                </div>
+                <div class="text-center p-4 rounded-xl hover:bg-pet-cream transition-colors cursor-pointer">
+                    <div class="w-12 h-12 bg-pink-100 rounded-full flex items-center justify-center mx-auto mb-3">
+                        <i class="fas fa-heart text-pink-500 text-xl"></i>
+                    </div>
+                    <p class="text-sm font-medium">입양분양</p>
+                </div>
+                <div class="text-center p-4 rounded-xl hover:bg-pet-cream transition-colors cursor-pointer">
+                    <div class="w-12 h-12 bg-indigo-100 rounded-full flex items-center justify-center mx-auto mb-3">
+                        <i class="fas fa-calendar-alt text-indigo-500 text-xl"></i>
+                    </div>
+                    <p class="text-sm font-medium">펫모임</p>
+                </div>
+                <div class="text-center p-4 rounded-xl hover:bg-pet-cream transition-colors cursor-pointer">
+                    <div class="w-12 h-12 bg-yellow-100 rounded-full flex items-center justify-center mx-auto mb-3">
+                        <i class="fas fa-search text-yellow-600 text-xl"></i>
+                    </div>
+                    <p class="text-sm font-medium">실종신고</p>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- @END_COMPONENT: Quick Categories -->
+
+    <!-- @COMPONENT: Featured Products [trending pet products] -->
+    <section class="py-12 bg-gray-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between mb-8">
+                <h2 class="text-2xl font-bold text-gray-900">인기 펫용품</h2>
+                <a href="#" class="text-pet-orange font-medium hover:text-orange-600 transition-colors">
+                    더보기 <i class="fas fa-chevron-right ml-1"></i>
+                </a>
+            </div>
+            
+            <!-- @MAP: featuredProducts.map(product => ( -->
+            <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+                <div class="bg-white rounded-xl shadow-sm hover:shadow-md transition-shadow cursor-pointer" data-mock="true">
+                    <!-- Premium dog food with kibble pieces -->
+                    <img src="https://images.unsplash.com/photo-1589941013453-ec89f33b5e95?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&h=300" alt="Premium dog food" class="w-full h-48 object-cover rounded-t-xl" />
+                    <div class="p-4">
+                        <h3 class="font-semibold text-gray-900 mb-2" data-bind="product.title">프리미엄 강아지 사료 3kg</h3>
+                        <p class="text-pet-orange font-bold text-lg" data-bind="product.price">45,000원</p>
+                        <p class="text-gray-500 text-sm" data-bind="product.location">서초4동 · 2시간 전</p>
+                        <div class="flex items-center mt-2">
+                            <i class="fas fa-heart text-gray-300 mr-1"></i>
+                            <span class="text-sm text-gray-500" data-bind="product.likes">12</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-xl shadow-sm hover:shadow-md transition-shadow cursor-pointer" data-mock="true">
+                    <!-- Cat playing with colorful toys -->
+                    <img src="https://images.unsplash.com/photo-1561948955-570b270e7c36?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&h=300" alt="Cat toys set" class="w-full h-48 object-cover rounded-t-xl" />
+                    <div class="p-4">
+                        <h3 class="font-semibold text-gray-900 mb-2" data-bind="product.title">고양이 장난감 세트</h3>
+                        <p class="text-pet-orange font-bold text-lg" data-bind="product.price">15,000원</p>
+                        <p class="text-gray-500 text-sm" data-bind="product.location">서초동 · 1일 전</p>
+                        <div class="flex items-center mt-2">
+                            <i class="fas fa-heart text-gray-300 mr-1"></i>
+                            <span class="text-sm text-gray-500" data-bind="product.likes">8</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-xl shadow-sm hover:shadow-md transition-shadow cursor-pointer" data-mock="true">
+                    <!-- Dog leash and collar accessories -->
+                    <img src="https://images.unsplash.com/photo-1601758228041-f3b2795255f1?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&h=300" alt="Dog leash and collar" class="w-full h-48 object-cover rounded-t-xl" />
+                    <div class="p-4">
+                        <h3 class="font-semibold text-gray-900 mb-2" data-bind="product.title">강아지 목줄 + 리드줄</h3>
+                        <p class="text-pet-orange font-bold text-lg" data-bind="product.price">25,000원</p>
+                        <p class="text-gray-500 text-sm" data-bind="product.location">역삼동 · 3시간 전</p>
+                        <div class="flex items-center mt-2">
+                            <i class="fas fa-heart text-gray-300 mr-1"></i>
+                            <span class="text-sm text-gray-500" data-bind="product.likes">5</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-xl shadow-sm hover:shadow-md transition-shadow cursor-pointer" data-mock="true">
+                    <!-- Pet carrier bag for travel -->
+                    <img src="https://images.unsplash.com/photo-1544568100-847a948585b9?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&h=300" alt="Pet carrier bag" class="w-full h-48 object-cover rounded-t-xl" />
+                    <div class="p-4">
+                        <h3 class="font-semibold text-gray-900 mb-2" data-bind="product.title">애완동물 이동가방</h3>
+                        <p class="text-pet-orange font-bold text-lg" data-bind="product.price">35,000원</p>
+                        <p class="text-gray-500 text-sm" data-bind="product.location">강남구 · 5시간 전</p>
+                        <div class="flex items-center mt-2">
+                            <i class="fas fa-heart text-gray-300 mr-1"></i>
+                            <span class="text-sm text-gray-500" data-bind="product.likes">15</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- @END_MAP )) -->
+        </div>
+    </section>
+    <!-- @END_COMPONENT: Featured Products -->
+
+    <!-- @COMPONENT: Pet Services [local pet service providers] -->
+    <section class="py-12 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between mb-8">
+                <h2 class="text-2xl font-bold text-gray-900">우리 동네 펫서비스</h2>
+                <a href="#" class="text-pet-orange font-medium hover:text-orange-600 transition-colors">
+                    더보기 <i class="fas fa-chevron-right ml-1"></i>
+                </a>
+            </div>
+            
+            <!-- @MAP: petServices.map(service => ( -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div class="bg-white border border-gray-200 rounded-xl p-6 hover:shadow-md transition-shadow cursor-pointer" data-mock="true">
+                    <div class="flex items-start space-x-4">
+                        <div class="w-16 h-16 bg-pet-light-green rounded-xl flex items-center justify-center flex-shrink-0">
+                            <i class="fas fa-cut text-pet-green text-2xl"></i>
+                        </div>
+                        <div class="flex-1">
+                            <h3 class="font-semibold text-gray-900 mb-1" data-bind="service.name">펫살롱 베베</h3>
+                            <p class="text-gray-600 text-sm mb-2" data-bind="service.description">전문 미용사가 진행하는 프리미엄 펫미용</p>
+                            <div class="flex items-center space-x-2 text-sm text-gray-500 mb-2">
+                                <i class="fas fa-star text-yellow-400"></i>
+                                <span data-bind="service.rating">4.8</span>
+                                <span>·</span>
+                                <span data-bind="service.reviews">리뷰 127개</span>
+                            </div>
+                            <p class="text-sm text-gray-500" data-bind="service.location">서초4동 · 도보 5분</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-white border border-gray-200 rounded-xl p-6 hover:shadow-md transition-shadow cursor-pointer" data-mock="true">
+                    <div class="flex items-start space-x-4">
+                        <div class="w-16 h-16 bg-blue-100 rounded-xl flex items-center justify-center flex-shrink-0">
+                            <i class="fas fa-stethoscope text-pet-blue text-2xl"></i>
+                        </div>
+                        <div class="flex-1">
+                            <h3 class="font-semibold text-gray-900 mb-1" data-bind="service.name">서초 동물병원</h3>
+                            <p class="text-gray-600 text-sm mb-2" data-bind="service.description">24시간 응급진료 가능한 종합동물병원</p>
+                            <div class="flex items-center space-x-2 text-sm text-gray-500 mb-2">
+                                <i class="fas fa-star text-yellow-400"></i>
+                                <span data-bind="service.rating">4.9</span>
+                                <span>·</span>
+                                <span data-bind="service.reviews">리뷰 234개</span>
+                            </div>
+                            <p class="text-sm text-gray-500" data-bind="service.location">서초동 · 차량 3분</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-white border border-gray-200 rounded-xl p-6 hover:shadow-md transition-shadow cursor-pointer" data-mock="true">
+                    <div class="flex items-start space-x-4">
+                        <div class="w-16 h-16 bg-purple-100 rounded-xl flex items-center justify-center flex-shrink-0">
+                            <i class="fas fa-walking text-purple-500 text-2xl"></i>
+                        </div>
+                        <div class="flex-1">
+                            <h3 class="font-semibold text-gray-900 mb-1" data-bind="service.name">댕댕이 펫시터</h3>
+                            <p class="text-gray-600 text-sm mb-2" data-bind="service.description">믿을 수 있는 전문 펫시터 서비스</p>
+                            <div class="flex items-center space-x-2 text-sm text-gray-500 mb-2">
+                                <i class="fas fa-star text-yellow-400"></i>
+                                <span data-bind="service.rating">4.7</span>
+                                <span>·</span>
+                                <span data-bind="service.reviews">리뷰 89개</span>
+                            </div>
+                            <p class="text-sm text-gray-500" data-bind="service.location">역삼동 · 도보 8분</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- @END_MAP )) -->
+        </div>
+    </section>
+    <!-- @END_COMPONENT: Pet Services -->
+
+    <!-- @COMPONENT: Community Section [pet community activities] -->
+    <section class="py-12 bg-gray-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between mb-8">
+                <h2 class="text-2xl font-bold text-gray-900">펫커뮤니티</h2>
+                <a href="#" class="text-pet-orange font-medium hover:text-orange-600 transition-colors">
+                    더보기 <i class="fas fa-chevron-right ml-1"></i>
+                </a>
+            </div>
+            
+            <!-- @MAP: communityPosts.map(post => ( -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="bg-white rounded-xl p-6 shadow-sm hover:shadow-md transition-shadow" data-mock="true">
+                    <div class="flex items-start space-x-3 mb-4">
+                        <!-- Happy dog owner with their pet -->
+                        <img src="https://images.unsplash.com/photo-1518717758536-85ae29035b6d?ixlib=rb-4.0.3&auto=format&fit=crop&w=100&h=100" alt="Pet owner profile" class="w-10 h-10 rounded-full object-cover" />
+                        <div>
+                            <h3 class="font-semibold text-gray-900" data-bind="post.author">멍멍이맘</h3>
+                            <p class="text-sm text-gray-500" data-bind="post.time">서초4동 · 30분 전</p>
+                        </div>
+                    </div>
+                    <h4 class="font-medium text-gray-900 mb-2" data-bind="post.title">강아지 산책 친구 구해요! 🐕</h4>
+                    <p class="text-gray-600 text-sm mb-4" data-bind="post.content">매일 오후 6시쯤 반포한강공원에서 산책하는데, 함께 산책할 강아지 친구들 구합니다. 저희 댕댕이는 골든리트리버 2살이에요!</p>
+                    <div class="flex items-center space-x-4 text-sm text-gray-500">
+                        <div class="flex items-center">
+                            <i class="fas fa-heart text-gray-300 mr-1"></i>
+                            <span data-bind="post.likes">15</span>
+                        </div>
+                        <div class="flex items-center">
+                            <i class="fas fa-comment text-gray-300 mr-1"></i>
+                            <span data-bind="post.comments">8</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-xl p-6 shadow-sm hover:shadow-md transition-shadow" data-mock="true">
+                    <div class="flex items-start space-x-3 mb-4">
+                        <!-- Cat lover with their feline friend -->
+                        <img src="https://images.unsplash.com/photo-1529139574466-a303027c1d8b?ixlib=rb-4.0.3&auto=format&fit=crop&w=100&h=100" alt="Cat owner profile" class="w-10 h-10 rounded-full object-cover" />
+                        <div>
+                            <h3 class="font-semibold text-gray-900" data-bind="post.author">냥이아빠</h3>
+                            <p class="text-sm text-gray-500" data-bind="post.time">역삼동 · 1시간 전</p>
+                        </div>
+                    </div>
+                    <h4 class="font-medium text-gray-900 mb-2" data-bind="post.title">[실종] 회색 고양이 찾습니다 😢</h4>
+                    <p class="text-gray-600 text-sm mb-4" data-bind="post.content">어제 밤 역삼역 근처에서 저희 고양이 '구름이'가 실종되었습니다. 회색 털에 목에 빨간 목걸이를 하고 있어요. 목격하신 분은 연락 부탁드립니다.</p>
+                    <div class="flex items-center space-x-4 text-sm text-gray-500">
+                        <div class="flex items-center">
+                            <i class="fas fa-heart text-gray-300 mr-1"></i>
+                            <span data-bind="post.likes">32</span>
+                        </div>
+                        <div class="flex items-center">
+                            <i class="fas fa-comment text-gray-300 mr-1"></i>
+                            <span data-bind="post.comments">18</span>
+                        </div>
+                        <span class="bg-red-100 text-red-600 px-2 py-1 rounded text-xs font-medium">실종신고</span>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-xl p-6 shadow-sm hover:shadow-md transition-shadow" data-mock="true">
+                    <div class="flex items-start space-x-3 mb-4">
+                        <!-- Pet adoption volunteer -->
+                        <img src="https://images.unsplash.com/photo-1601758228041-f3b2795255f1?ixlib=rb-4.0.3&auto=format&fit=crop&w=100&h=100" alt="Volunteer profile" class="w-10 h-10 rounded-full object-cover" />
+                        <div>
+                            <h3 class="font-semibold text-gray-900" data-bind="post.author">유기견보호소</h3>
+                            <p class="text-sm text-gray-500" data-bind="post.time">서초구 · 2시간 전</p>
+                        </div>
+                    </div>
+                    <h4 class="font-medium text-gray-900 mb-2" data-bind="post.title">사랑스러운 강아지들이 새 가족을 기다려요 ❤️</h4>
+                    <p class="text-gray-600 text-sm mb-4" data-bind="post.content">건강하고 활발한 믹스견들이 따뜻한 가정을 찾고 있습니다. 입양 상담 언제든지 환영합니다. 책임감 있는 가족 분들의 연락 기다립니다.</p>
+                    <div class="flex items-center space-x-4 text-sm text-gray-500">
+                        <div class="flex items-center">
+                            <i class="fas fa-heart text-gray-300 mr-1"></i>
+                            <span data-bind="post.likes">89</span>
+                        </div>
+                        <div class="flex items-center">
+                            <i class="fas fa-comment text-gray-300 mr-1"></i>
+                            <span data-bind="post.comments">25</span>
+                        </div>
+                        <span class="bg-pink-100 text-pink-600 px-2 py-1 rounded text-xs font-medium">입양분양</span>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-xl p-6 shadow-sm hover:shadow-md transition-shadow" data-mock="true">
+                    <div class="flex items-start space-x-3 mb-4">
+                        <!-- Dog training enthusiast -->
+                        <img src="https://images.unsplash.com/photo-1552053831-71594a27632d?ixlib=rb-4.0.3&auto=format&fit=crop&w=100&h=100" alt="Trainer profile" class="w-10 h-10 rounded-full object-cover" />
+                        <div>
+                            <h3 class="font-semibold text-gray-900" data-bind="post.author">도그트레이너김</h3>
+                            <p class="text-sm text-gray-500" data-bind="post.time">강남구 · 3시간 전</p>
+                        </div>
+                    </div>
+                    <h4 class="font-medium text-gray-900 mb-2" data-bind="post.title">강아지 기본 훈련 모임 참가자 모집 🎾</h4>
+                    <p class="text-gray-600 text-sm mb-4" data-bind="post.content">매주 토요일 오전 한강공원에서 강아지 기본 훈련 모임을 진행합니다. 앉기, 기다리기, 산책 예절 등을 함께 배워요. 초보자 환영!</p>
+                    <div class="flex items-center space-x-4 text-sm text-gray-500">
+                        <div class="flex items-center">
+                            <i class="fas fa-heart text-gray-300 mr-1"></i>
+                            <span data-bind="post.likes">24</span>
+                        </div>
+                        <div class="flex items-center">
+                            <i class="fas fa-comment text-gray-300 mr-1"></i>
+                            <span data-bind="post.comments">12</span>
+                        </div>
+                        <span class="bg-indigo-100 text-indigo-600 px-2 py-1 rounded text-xs font-medium">펫모임</span>
+                    </div>
+                </div>
+            </div>
+            <!-- @END_MAP )) -->
+        </div>
+    </section>
+    <!-- @END_COMPONENT: Community Section -->
+
+    <!-- @COMPONENT: Recently Posted [recent listings] -->
+    <section class="py-12 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between mb-8">
+                <h2 class="text-2xl font-bold text-gray-900">최근 올라온 상품</h2>
+                <a href="#" class="text-pet-orange font-medium hover:text-orange-600 transition-colors">
+                    더보기 <i class="fas fa-chevron-right ml-1"></i>
+                </a>
+            </div>
+            
+            <!-- @MAP: recentProducts.map(product => ( -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div class="flex space-x-4 p-4 border border-gray-200 rounded-xl hover:shadow-md transition-shadow cursor-pointer" data-mock="true">
+                    <!-- Cat litter box and accessories -->
+                    <img src="https://images.unsplash.com/photo-1574231164645-d6f0e8553590?ixlib=rb-4.0.3&auto=format&fit=crop&w=120&h=120" alt="Cat litter products" class="w-20 h-20 object-cover rounded-lg flex-shrink-0" />
+                    <div class="flex-1">
+                        <h3 class="font-semibold text-gray-900 mb-1" data-bind="product.title">고양이 화장실 + 모래</h3>
+                        <p class="text-pet-orange font-bold mb-1" data-bind="product.price">30,000원</p>
+                        <p class="text-gray-500 text-sm" data-bind="product.location">서초4동 · 방금 전</p>
+                    </div>
+                </div>
+
+                <div class="flex space-x-4 p-4 border border-gray-200 rounded-xl hover:shadow-md transition-shadow cursor-pointer" data-mock="true">
+                    <!-- Dog bed and comfort items -->
+                    <img src="https://images.unsplash.com/photo-1583337130417-3346a1be7dee?ixlib=rb-4.0.3&auto=format&fit=crop&w=120&h=120" alt="Dog bed and comfort items" class="w-20 h-20 object-cover rounded-lg flex-shrink-0" />
+                    <div class="flex-1">
+                        <h3 class="font-semibold text-gray-900 mb-1" data-bind="product.title">강아지 쿠션 침대</h3>
+                        <p class="text-pet-orange font-bold mb-1" data-bind="product.price">20,000원</p>
+                        <p class="text-gray-500 text-sm" data-bind="product.location">역삼동 · 10분 전</p>
+                    </div>
+                </div>
+
+                <div class="flex space-x-4 p-4 border border-gray-200 rounded-xl hover:shadow-md transition-shadow cursor-pointer" data-mock="true">
+                    <!-- Aquarium with fish supplies -->
+                    <img src="https://pixabay.com/get/g838e388bb16d6a1951a92925329b875ed5c50aac7cd17628d009dbb11d3d924b120dd1ebcf348479988dc4190072344a7f30ada62cfc4ae67cfd3f2c21dd7b9f_1280.jpg" alt="Fish aquarium setup" class="w-20 h-20 object-cover rounded-lg flex-shrink-0" />
+                    <div class="flex-1">
+                        <h3 class="font-semibold text-gray-900 mb-1" data-bind="product.title">어항 세트 (여과기 포함)</h3>
+                        <p class="text-pet-orange font-bold mb-1" data-bind="product.price">50,000원</p>
+                        <p class="text-gray-500 text-sm" data-bind="product.location">강남구 · 15분 전</p>
+                    </div>
+                </div>
+            </div>
+            <!-- @END_MAP )) -->
+        </div>
+    </section>
+    <!-- @END_COMPONENT: Recently Posted -->
+
+    <!-- @COMPONENT: Footer [site links and information] -->
+    <footer class="bg-gray-900 text-white py-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <div>
+                    <div class="text-2xl font-bold text-pet-orange mb-4">펫앤24</div>
+                    <p class="text-gray-300 text-sm mb-4">우리 동네 반려동물과 함께하는 따뜻한 마켓플레이스</p>
+                    <div class="flex space-x-4">
+                        <a href="#" class="text-gray-300 hover:text-pet-orange transition-colors">
+                            <i class="fab fa-facebook-f"></i>
+                        </a>
+                        <a href="#" class="text-gray-300 hover:text-pet-orange transition-colors">
+                            <i class="fab fa-instagram"></i>
+                        </a>
+                        <a href="#" class="text-gray-300 hover:text-pet-orange transition-colors">
+                            <i class="fab fa-youtube"></i>
+                        </a>
+                    </div>
+                </div>
+                
+                <div>
+                    <h3 class="font-semibold mb-4">서비스</h3>
+                    <ul class="space-y-2 text-sm text-gray-300">
+                        <li><a href="#" class="hover:text-pet-orange transition-colors">펫용품거래</a></li>
+                        <li><a href="#" class="hover:text-pet-orange transition-colors">펫서비스</a></li>
+                        <li><a href="#" class="hover:text-pet-orange transition-colors">동물병원</a></li>
+                        <li><a href="#" class="hover:text-pet-orange transition-colors">펫커뮤니티</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h3 class="font-semibold mb-4">고객지원</h3>
+                    <ul class="space-y-2 text-sm text-gray-300">
+                        <li><a href="#" class="hover:text-pet-orange transition-colors">자주 묻는 질문</a></li>
+                        <li><a href="#" class="hover:text-pet-orange transition-colors">고객센터</a></li>
+                        <li><a href="#" class="hover:text-pet-orange transition-colors">신고하기</a></li>
+                        <li><a href="#" class="hover:text-pet-orange transition-colors">이용약관</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h3 class="font-semibold mb-4">회사정보</h3>
+                    <ul class="space-y-2 text-sm text-gray-300">
+                        <li><a href="#" class="hover:text-pet-orange transition-colors">회사소개</a></li>
+                        <li><a href="#" class="hover:text-pet-orange transition-colors">채용정보</a></li>
+                        <li><a href="#" class="hover:text-pet-orange transition-colors">광고문의</a></li>
+                        <li><a href="#" class="hover:text-pet-orange transition-colors">개인정보처리방침</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="border-t border-gray-700 mt-8 pt-8 text-center text-sm text-gray-400">
+                <p>&copy; 2024 펫앤24. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+    <!-- @END_COMPONENT: Footer -->
+
+    <!-- Mobile Bottom Navigation -->
+    <div class="md:hidden fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 z-50">
+        <div class="grid grid-cols-5 py-2">
+            <a href="#" class="flex flex-col items-center py-2 text-pet-orange">
+                <i class="fas fa-home text-xl mb-1"></i>
+                <span class="text-xs">홈</span>
+            </a>
+            <a href="#" class="flex flex-col items-center py-2 text-gray-400">
+                <i class="fas fa-shopping-bag text-xl mb-1"></i>
+                <span class="text-xs">거래</span>
+            </a>
+            <a href="#" class="flex flex-col items-center py-2 text-gray-400">
+                <i class="fas fa-users text-xl mb-1"></i>
+                <span class="text-xs">커뮤니티</span>
+            </a>
+            <a href="#" class="flex flex-col items-center py-2 text-gray-400">
+                <i class="fas fa-heart text-xl mb-1"></i>
+                <span class="text-xs">관심목록</span>
+            </a>
+            <a href="#" class="flex flex-col items-center py-2 text-gray-400">
+                <i class="fas fa-user text-xl mb-1"></i>
+                <span class="text-xs">내정보</span>
+            </a>
+        </div>
+    </div>
+
+    <script>
+        (function() {
+            // TODO: Implement search functionality
+            // TODO: Implement location-based filtering
+            // TODO: Implement real-time notifications
+            // TODO: Connect to backend API for product listings
+            // TODO: Add image upload functionality for product listings
+            // TODO: Implement chat functionality between users
+            // TODO: Add push notification system for new messages/listings
+            
+            // Simulated interaction for mobile menu
+            console.log('펫앤24 marketplace initialized');
+            
+            // Location selector functionality
+            const locationElements = document.querySelectorAll('[data-bind="user.location"]');
+            locationElements.forEach(el => {
+                el.addEventListener('click', function() {
+                    // TODO: Show location selection modal
+                    console.log('Location selector clicked');
+                });
+            });
+            
+            // Search functionality placeholder
+            const searchInput = document.querySelector('input[type="text"]');
+            if (searchInput) {
+                searchInput.addEventListener('keypress', function(e) {
+                    if (e.key === 'Enter') {
+                        // TODO: Implement search functionality
+                        console.log('Search for:', this.value);
+                    }
+                });
+            }
+        })();
+    </script>
+</body>
+</html>

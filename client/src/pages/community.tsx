@@ -13,6 +13,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { apiRequest } from "@/lib/queryClient";
 import { useToast } from "@/hooks/use-toast";
+import type { CommunityPost } from "@shared/schema";
 
 const communityPostSchema = z.object({
   title: z.string().min(1, "제목을 입력해주세요"),
@@ -31,12 +32,12 @@ export default function CommunityPage() {
   const { toast } = useToast();
   const queryClient = useQueryClient();
 
-  const { data: posts, isLoading } = useQuery({
+  const { data: posts = [], isLoading } = useQuery<CommunityPost[]>({
     queryKey: [
-      `/api/community-posts`,
-      location && `location=${encodeURIComponent(location)}`,
-      postType && `type=${postType}`,
-    ].filter(Boolean).join("&"),
+      "/api/community-posts",
+      location ? `location=${encodeURIComponent(location)}` : undefined,
+      postType ? `type=${postType}` : undefined,
+    ].filter(Boolean) as string[],
   });
 
   const form = useForm<CommunityPostForm>({

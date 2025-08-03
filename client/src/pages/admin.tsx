@@ -51,17 +51,17 @@ export default function Admin() {
   const queryClient = useQueryClient();
 
   // 서비스 문의 조회
-  const { data: inquiries = [], isLoading: inquiriesLoading } = useQuery({
+  const { data: inquiries = [], isLoading: inquiriesLoading } = useQuery<ServiceInquiry[]>({
     queryKey: ["/api/service-inquiries"],
   });
 
   // 응급병원 조회
-  const { data: hospitals = [], isLoading: hospitalsLoading } = useQuery({
+  const { data: hospitals = [], isLoading: hospitalsLoading } = useQuery<EmergencyHospital[]>({
     queryKey: ["/api/emergency-hospitals"],
   });
 
   // 펫서비스 조회
-  const { data: services = [], isLoading: servicesLoading } = useQuery({
+  const { data: services = [], isLoading: servicesLoading } = useQuery<PetService[]>({
     queryKey: ["/api/pet-services"],
   });
 
@@ -223,7 +223,7 @@ export default function Admin() {
                   <CardHeader>
                     <div className="flex items-center justify-between">
                       <CardTitle className="text-lg">{inquiry.businessName}</CardTitle>
-                      {getStatusBadge(inquiry.status)}
+                      {getStatusBadge(inquiry.status || "pending")}
                     </div>
                     <CardDescription className="flex items-center space-x-1">
                       <Building2 className="w-4 h-4" />
@@ -245,7 +245,7 @@ export default function Admin() {
                       </div>
                       <div className="flex items-center space-x-2">
                         <Clock className="w-4 h-4 text-pet-neutral-500" />
-                        <span>{new Date(inquiry.createdAt).toLocaleDateString()}</span>
+                        <span>{inquiry.createdAt ? new Date(inquiry.createdAt).toLocaleDateString() : "날짜 없음"}</span>
                       </div>
                     </div>
 

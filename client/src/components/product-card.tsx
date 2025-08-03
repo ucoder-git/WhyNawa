@@ -3,7 +3,7 @@ import { Card } from "@/components/ui/card";
 import type { Listing, User, Category } from "@shared/schema";
 
 interface ProductCardProps {
-  listing: Listing & { seller: User; category: Category };
+  listing: Listing & { seller?: User; category?: Category };
   onLike?: (listingId: number) => void;
 }
 
